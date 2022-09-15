@@ -41,7 +41,7 @@ class _HomeState extends State<Home> {
   ];
 
   _closeAds() {
-    print(123);
+    //todo
   }
 
   @override
