@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:real_time_comm/models/product.dart';
 import 'package:real_time_comm/widgets/card.dart';
+import 'package:real_time_comm/widgets/promo.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -39,23 +40,33 @@ class _HomeState extends State<Home> {
     ),
   ];
 
+  _closeAds() {
+    print(123);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffE8EBF3),
+      backgroundColor: const Color(0xffE8EBF3),
       appBar: AppBar(
         title: const Text("E-commerce Product List"),
-        backgroundColor: Color(0xff1C4ED8),
+        backgroundColor: const Color(0xff1C4ED8),
       ),
-      body: ListView.builder(
-        itemCount: products.length,
-        itemBuilder: (context, index) {
-          return ProductCard(
-              name: products[index].name,
-              totalSold: products[index].totalSold,
-              price: products[index].price,
-              imgURL: products[index].imgURL);
-        },
+      body: Column(
+        children: [
+          PromoCard(onTap: _closeAds),
+          ListView.builder(
+            shrinkWrap: true,
+            itemCount: products.length,
+            itemBuilder: (context, index) {
+              return ProductCard(
+                  name: products[index].name,
+                  totalSold: products[index].totalSold,
+                  price: products[index].price,
+                  imgURL: products[index].imgURL);
+            },
+          ),
+        ],
       ),
     );
   }

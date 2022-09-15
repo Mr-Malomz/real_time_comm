@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
 class ProductCard extends StatelessWidget {
+  final String name;
+  final int totalSold;
+  final double price;
+  final String imgURL;
+
   const ProductCard({
     Key? key,
     required this.name,
@@ -8,11 +13,6 @@ class ProductCard extends StatelessWidget {
     required this.price,
     required this.imgURL,
   }) : super(key: key);
-
-  final String name;
-  final int totalSold;
-  final double price;
-  final String imgURL;
 
   @override
   Widget build(BuildContext context) {
