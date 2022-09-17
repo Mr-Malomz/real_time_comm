@@ -1,14 +1,14 @@
 class AppConstant {
-  final String databaseId = "62fd8cd2b67d0edab8e4";
-  final String projectId = "62fd8c8766522d6a0c35";
-  final String endpoint = "http://192.168.1.11/v1";
-  final String collectionId = "62fd8cfe5923c756372e";
+  final String databaseId = "6324e4eeacd349fc27a7";
+  final String projectId = "6324e49a723c62b19cff";
+  final String endpoint = "http://192.168.1.10/v1";
+  final String collectionId = "6324e51dd009b3d1a1f5";
 }
 
 class Promo {
   String? $id;
   String name;
-  String status;
+  bool status;
 
   Promo({required this.name, required this.status});
 

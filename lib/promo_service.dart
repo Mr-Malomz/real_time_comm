@@ -1,11 +1,11 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:real_time_comm/utils.dart';
 
-class StockService {
+class PromoService {
   Client client = Client();
   Databases? db;
 
-  StockService() {
+  PromoService() {
     _init();
   }
 
@@ -41,23 +41,6 @@ class StockService {
       return promoList!;
     } catch (e) {
       throw Exception('Error getting list of promos');
-    }
-  }
-
-  Future closePromo(String name, String status, String id) async {
-    try {
-      Promo updatePromo = Promo(
-        name: name,
-        status: status,
-      );
-      var data = await db?.updateDocument(
-        collectionId: AppConstant().collectionId,
-        documentId: id,
-        data: updatePromo.toJson(),
-      );
-      return data;
-    } catch (e) {
-      throw Exception('Error updating promo');
     }
   }
 }

@@ -1,5 +1,8 @@
+import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
 import 'package:real_time_comm/models/product.dart';
+import 'package:real_time_comm/promo_service.dart';
+import 'package:real_time_comm/utils.dart';
 import 'package:real_time_comm/widgets/card.dart';
 import 'package:real_time_comm/widgets/promo.dart';
 
@@ -11,9 +14,50 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  List<Promo>? promos;
+  bool _isLoading = false;
+  bool _isError = false;
+
   @override
   void initState() {
     super.initState();
+    _getPromoList();
+    _subscribe();
+  }
+
+  _getPromoList() async {
+    setState(() {
+      _isLoading = true;
+    });
+    PromoService().getPromos().then((value) {
+      setState(() {
+        promos = value;
+        _isLoading = false;
+      });
+    }).catchError((e) {
+      setState(() {
+        _isLoading = false;
+        _isError = true;
+      });
+    });
+  }
+
+  _subscribe() {
+    final realtime = Realtime(PromoService().client);
+    final subscription = realtime.subscribe(['documents']);
+
+    //listening to stream we can listen to
+    subscription.stream.listen((e) {
+      if (e.payload.isNotEmpty) {
+        if (e.events.contains('databases.*.collections.*.documents.*.update')) {
+          setState(() {
+            promos!
+                .map((element) => element.status = e.payload['status'])
+                .toList();
+          });
+        }
+      }
+    });
   }
 
   List<Product> products = [
@@ -40,10 +84,6 @@ class _HomeState extends State<Home> {
     ),
   ];
 
-  _closeAds() {
-    //todo
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,22 +92,34 @@ class _HomeState extends State<Home> {
         title: const Text("E-commerce Product List"),
         backgroundColor: const Color(0xff1C4ED8),
       ),
-      body: Column(
-        children: [
-          PromoCard(onTap: _closeAds),
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: products.length,
-            itemBuilder: (context, index) {
-              return ProductCard(
-                  name: products[index].name,
-                  totalSold: products[index].totalSold,
-                  price: products[index].price,
-                  imgURL: products[index].imgURL);
-            },
-          ),
-        ],
-      ),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : _isError
+              ? const Center(
+                  child: Text(
+                    'Error loading promos',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                )
+              : Column(
+                  children: [
+                    promos![0].status ? const PromoCard() : const SizedBox(),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: products.length,
+                      itemBuilder: (context, index) {
+                        return ProductCard(
+                            name: products[index].name,
+                            totalSold: products[index].totalSold,
+                            price: products[index].price,
+                            imgURL: products[index].imgURL);
+                      },
+                    ),
+                  ],
+                ),
     );
   }
 }
