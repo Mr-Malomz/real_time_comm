@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
 class PromoCard extends StatefulWidget {
-  final Function() onTap;
-
-  const PromoCard({Key? key, required this.onTap}) : super(key: key);
+  const PromoCard({Key? key}) : super(key: key);
 
   @override
   State<PromoCard> createState() => _PromoCardState();
@@ -75,9 +73,7 @@ class _PromoCardState extends State<PromoCard> {
                 child: Material(
                   color: Colors.white70,
                   child: InkWell(
-                    onTap: () {
-                      widget.onTap();
-                    },
+                    onTap: () {},
                     child: const SizedBox(
                       width: 56,
                       height: 56,

@@ -40,10 +40,6 @@ class _HomeState extends State<Home> {
     ),
   ];
 
-  _closeAds() {
-    //todo
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +50,7 @@ class _HomeState extends State<Home> {
       ),
       body: Column(
         children: [
-          PromoCard(onTap: _closeAds),
+          PromoCard(),
           ListView.builder(
             shrinkWrap: true,
             itemCount: products.length,
